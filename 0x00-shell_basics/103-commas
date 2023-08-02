@@ -1,2 +1,2 @@
 #!/bin/bash
-(ls -a1; echo ./.; echo ./..) | tr '\n' ',' | sort -n
+ls -p -a -x -m
