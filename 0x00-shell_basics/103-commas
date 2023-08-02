@@ -1,2 +1,2 @@
 #!/bin/bash
-ls -ap1 | { read line && echo $line; read line && echo $line; grep -vE '^\.{1,2}$' | sort -d -f | while read -r entry; do if [[ "$entry" == */ ]]; then echo -n "$entry"; else echo -n "$entry,"; fi; done | tr -d '\n'; echo; }
+ls -a1 | sort -n | sed '1,2d;s/\./.\//'
