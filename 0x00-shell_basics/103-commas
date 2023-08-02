@@ -1,1 +1,2 @@
+#!/bin/bash
 (ls -Ap | grep -v '^.$' | grep -v '^..$' | sort -df | sed '/^[0-9]/s/$/,/' | tr '\n' ','; echo) | sed 's/,$/\n/'
