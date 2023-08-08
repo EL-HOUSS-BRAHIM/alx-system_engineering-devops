@@ -1,0 +1,8 @@
+echo sed -n p;n >> 102-odd
+chmod +x 102-odd
+git add .
+git commit -m 102-odd
+git push
+
+echo '#!/bin/bash' > 103-water_and_stir
+echo echo $((10#$WATER + 10#$STIR))" | bc
