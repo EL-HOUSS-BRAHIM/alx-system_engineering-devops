@@ -1,2 +1,2 @@
 #!/bin/bash
-sort | uniq -c | awk '$1 == 1 {print $2}'
+sort | uniq -c | awk '$1 == 1 { print $2 }'
