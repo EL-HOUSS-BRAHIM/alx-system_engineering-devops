@@ -1,2 +1,2 @@
 #!/bin/bash
-grep -n '^' | grep -e '^[0-9]\+[02468]:'
+grep -n '.*' | grep -v '.*[13579]'
