@@ -1,2 +1,2 @@
 #!/bin/bash
-echo "sed -n 'p;n'
+awk 'NR%2==1'
