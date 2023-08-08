@@ -1,2 +1,2 @@
 #!/bin/bash
-grep -n '.*' | grep -v '.*[13579]'
+head -n 1 && tail -n +3
