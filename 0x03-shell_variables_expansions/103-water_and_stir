@@ -1,2 +1,2 @@
 #!/bin/bash
-echo $((WATER + STIR))
+printf -v BESTCHOL '%o' $((5#${WATER//water/01234} + 5#${STIR//stir./01234}))
