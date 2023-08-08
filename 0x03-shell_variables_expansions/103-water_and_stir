@@ -1,2 +1,2 @@
 #!/bin/bash
-printf -v bestchol '%d' $((10#$WATER + 10#$STIR))
+echo $((10#$WATER + 10#$STIR))
