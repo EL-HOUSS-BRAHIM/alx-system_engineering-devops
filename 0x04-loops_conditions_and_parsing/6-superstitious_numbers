@@ -1,12 +1,21 @@
 #!/bin/bash
 
 for ((i = 1; i <= 20; i++)); do
-    if [ $i -eq 4 ]; then
-        echo "bad luck from China"
-    elif [ $i -eq 9 ]; then
-        echo "bad luck from Japan"
-    elif [ $i -eq 17 ]; then
-        echo "bad luck from Italy"
-    else
-    echo $i
+    case $i in
+        4)
+            echo $i
+            echo "bad luck from China"
+            ;;
+        9)
+            echo $i
+            echo "bad luck from Japan"
+            ;;
+        17)
+            echo $i
+            echo "bad luck from Italy"
+            ;;
+        *)
+            echo $i
+            ;;
+    esac
 done
