@@ -1,12 +1,12 @@
 #!/usr/bin/env ruby
 
-def matchCase(str)
-  regex = /hbt*n/
+def MatchCase(str)
+  regex = /h.tn/
   return str.scan(regex).join
 end
+
 if ARGV.length == 1
-  puts matchCase(ARGV[0])
+  puts MatchCase(ARGV[0])
 else
   puts "Usage: #{$PROGRAM_NAME} <string>"
 end
-  
