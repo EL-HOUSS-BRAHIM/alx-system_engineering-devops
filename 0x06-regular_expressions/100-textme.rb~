@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+
+def MatchCase(log)
+  sender = log.match(/\[from:(.+?)\]/)&.captures&.first || "Unknown"
+  receiver = log.match(/\[to:(.+?)\]/)&.captures&.first || "Unknown"
+  flags = log.match(/\[flags:(.+?)\]/)&.captures&.first || "Unknown"
+  puts "#{sender},#{receiver},#{flags}"
+end
+if ARGV.length == 1
+  log = ARGV[0]
+  MatchCase(log)
+else
+  puts "Usage: #{$PROGRAM_NAME} <log>"
+end
