@@ -1,11 +1,11 @@
 #!/usr/bin/env ruby
 
-def MatchCase(int)
-  regex = /[0-9]/
-  return int.to_s.scan(regex).join
+def MatchCase(str)
+  regex = /^\d{10}$/
+  return str.scan(regex).join
 end
 if ARGV.length == 1
-  puts MatchCase(ARGV[0].to_i)
+  puts MatchCase(ARGV[0])
 else
-  puts "Usage: #{$PROGRAM_NAME} <integer>"
+  puts "Usage: #{$PROGRAM_NAME} <string>"
 end
