@@ -1,0 +1,3 @@
+#!/bin/bash
+
+ifconfig | grep 'inet ' | awk '{print $2}'
