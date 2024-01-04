@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 def matchCase(str)
-  regex = /hbt(.*?)n/
+  regex = /hbt*n/
   return str.scan(regex).join
 end
 if ARGV.length == 1
