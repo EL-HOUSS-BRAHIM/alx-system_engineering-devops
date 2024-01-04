@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 def MatchCase(str)
-  regex = /hb{1}tn/
+  regex = /hb?tn/
   return str.scan(regex).join
 end
 
