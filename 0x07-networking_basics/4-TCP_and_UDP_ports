@@ -1,8 +1,3 @@
 #!/bin/bash
 
-# Display listening ports with PID and program name
-echo "Active Internet connections (only servers)"
-echo "Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name"
-
-# Use netstat to display listening ports with process information
-netstat -tulpen | grep LISTEN
+netstat -l --program
