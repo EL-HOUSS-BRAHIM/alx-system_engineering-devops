@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Displays listening ports. Includes listening sockets too
 # + as the PID and name of the program to which each socket belongs.
 
