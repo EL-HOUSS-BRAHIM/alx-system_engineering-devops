@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# change the confugaration on ubuntu server for host records
+# + change the address of facebook and localhost.
 cp /etc/hosts ~/hosts.new
 sed -i 's/127.*$/127.0.0.2 localhost\n8.8.8.8 facebook.com/' ~/hosts.new
 cp -f ~/hosts.new /etc/hosts
