@@ -1,45 +1,28 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# Check if script is being run as root
-if [[ $EUID -ne 0 ]]; then
-    echo "This script must be run as root" 
-    exit 1
-fi
+# Update package index and install Nginx
+echo -e "Updating and installing Nginx.\n"
+sudo apt-get update -y -qq && \
+	 sudo apt-get install nginx -y
 
-# Update package index
-echo "Updating package index..."
-if ! sudo apt update; then
-    echo "Failed to update package index. Exiting."
-    exit 1
-fi
+# Start nginx service
+sudo service nginx start
 
-# Install Nginx
-echo "Installing Nginx..."
-if ! sudo apt install nginx -y; then
-    echo "Failed to install Nginx. Exiting."
-    exit 1
-fi
+# Allow nginx on firewall
+sudo ufw allow 'Nginx HTTP'
 
-# Configure Nginx to listen on port 80
-echo "Configuring Nginx to listen on port 80..."
-if ! sudo sed -i 's/80 default_server;/80;/g' /etc/nginx/sites-available/default; then
-    echo "Failed to configure Nginx. Exiting."
-    exit 1
-fi
+# Give the user ownership to website files for easy editing
+sudo chown -R "$USER":"$USER" /var/www/html
+sudo chmod -R 755 /var/www
 
-# Restart Nginx without using systemctl
-echo "Restarting Nginx..."
-if ! sudo kill -s HUP $(cat /var/run/nginx.pid); then
-    echo "Failed to restart Nginx. Exiting."
-    exit 1
-fi
+# Backup default index
+cp /var/www/html/index.nginx-debian.html /var/www/html/index.nginx-debian.html.bckp
 
-# Create a simple HTML file with "Hello World!" message
-echo "Creating HTML file..."
-if ! echo "<html><body><h1>Hello World!</h1></body></html>" | sudo tee /var/www/html/index.html > /dev/null; then
-    echo "Failed to create HTML file. Exiting."
-    exit 1
-fi
+# Create new index with "Hello World!"
+echo -e "Hello World!" | sudo dd status=none of=/var/www/html/index.nginx-debian.html
 
-# Print completion message
-echo "Nginx installed and configured. Server is now serving 'Hello World!' at http://your_server_ip/"
+# Restart Nginx
+sudo service nginx restart
+
+echo -e "\nCompleted. ✅\n"
+
