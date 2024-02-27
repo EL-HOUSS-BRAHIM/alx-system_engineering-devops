@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# Check if script is being run as root
+if [[ $EUID -ne 0 ]]; then
+    echo "This script must be run as root" 
+    exit 1
+fi
+
+# Update package index
+echo "Updating package index..."
+if ! sudo apt update; then
+    echo "Failed to update package index. Exiting."
+    exit 1
+fi
+
+# Install Nginx
+echo "Installing Nginx..."
+if ! sudo apt install nginx -y; then
+    echo "Failed to install Nginx. Exiting."
+    exit 1
+fi
+
+# Configure Nginx to redirect /redirect_me to another page with 301 Moved Permanently
+echo "Configuring Nginx redirection..."
+if ! sudo sed -i '/^server {/a \        location /redirect_me {\n            return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\n        }' /etc/nginx/sites-available/default; then
+    echo "Failed to configure Nginx redirection. Exiting."
+    exit 1
+fi
+
+# Restart Nginx without using systemctl
+echo "Restarting Nginx..."
+if ! sudo kill -s HUP $(cat /var/run/nginx.pid); then
+    echo "Failed to restart Nginx. Exiting."
+    exit 1
+fi
+
+echo "Nginx configured for redirection. /redirect_me will now redirect to https://www.youtube.com/watch?v=QH2-TGUlwu4 with 301 Moved Permanently status."

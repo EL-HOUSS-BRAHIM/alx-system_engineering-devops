@@ -1,0 +1,44 @@
+#!/bin/bash
+
+# Check if script is being run as root
+if [[ $EUID -ne 0 ]]; then
+    echo "This script must be run as root" 
+    exit 1
+fi
+
+# Update package index
+echo "Updating package index..."
+if ! sudo apt update; then
+    echo "Failed to update package index. Exiting."
+    exit 1
+fi
+
+# Install Nginx
+echo "Installing Nginx..."
+if ! sudo apt install nginx -y; then
+    echo "Failed to install Nginx. Exiting."
+    exit 1
+fi
+
+# Create custom 404 error page
+echo "Creating custom 404 error page..."
+if ! echo '<!DOCTYPE html><html><head><title>404 Not Found</title></head><body><h1>Ceci n'\''est pas une page</h1></body></html>' | sudo tee /var/www/html/404.html > /dev/null; then
+    echo "Failed to create custom 404 error page. Exiting."
+    exit 1
+fi
+
+# Configure Nginx to use custom 404 error page
+echo "Configuring Nginx to use custom 404 error page..."
+if ! sudo sed -i '/^server {/a \        error_page 404 /404.html;\n        location = /404.html {\n            root /var/www/html;\n            internal;\n        }' /etc/nginx/sites-available/default; then
+    echo "Failed to configure Nginx for custom 404 error page. Exiting."
+    exit 1
+fi
+
+# Restart Nginx without using systemctl
+echo "Restarting Nginx..."
+if ! sudo kill -s HUP $(cat /var/run/nginx.pid); then
+    echo "Failed to restart Nginx. Exiting."
+    exit 1
+fi
+
+echo "Nginx configured for custom 404 error page. Requests to non-existing pages will now return HTTP 404 error with the message 'Ceci n'est pas une page'."
