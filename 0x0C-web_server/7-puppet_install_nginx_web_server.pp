@@ -1,45 +1,24 @@
-# File: nginx_setup.pp
+# Setup New Ubuntu server with nginx
 
-# Install Nginx package
+exec { 'update system':
+        command => '/usr/bin/apt-get update',
+}
+
 package { 'nginx':
-  ensure => installed,
+	ensure => 'installed',
+	require => Exec['update system']
 }
 
-# Configure Nginx to listen on port 80
-file { '/etc/nginx/sites-available/default':
-  ensure  => present,
-  content => "
-    server {
-        listen 80 default_server;
-        listen [::]:80 default_server;
-
-        root /var/www/html;
-        index index.html index.htm index.nginx-debian.html;
-
-        server_name _;
-
-        location / {
-            try_files \$uri \$uri/ =404;
-        }
-
-        location = /redirect_me {
-            return 301 https://www.example.com;
-        }
-    }
-  ",
-  notify => Service['nginx'],
+file {'/var/www/html/index.html':
+	content => 'Hello World!'
 }
 
-# Ensure Nginx service is running and enabled
-service { 'nginx':
-  ensure => running,
-  enable => true,
+exec {'redirect_me':
+	command => 'sed -i "24i\	rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;" /etc/nginx/sites-available/default',
+	provider => 'shell'
 }
 
-# Create Hello World HTML file
-file { '/var/www/html/index.html':
-  ensure  => present,
-  content => '<!DOCTYPE html><html><head><title>Hello World!</title></head><body><h1>Hello World!</h1></body></html>',
-  require => Package['nginx'],
+service {'nginx':
+	ensure => running,
+	require => Package['nginx']
 }
-
