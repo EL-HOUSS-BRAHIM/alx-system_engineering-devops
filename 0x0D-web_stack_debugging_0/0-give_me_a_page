@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Give me a page! using docker.
+/etc/init.d/apache2 start
