@@ -1,5 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Create an RSA key pair with specific requirements
-ssh-keygen -t rsa -b 4096 -f school -N "betty"
+ssh-keygen -t rsa -b 4096 -f school -P "betty"
 
