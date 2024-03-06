@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+# Install necessary tools for debugging
+apt-get update
+apt-get install -y net-tools lsof
+
+# Check Nginx configuration
+nginx_conf="/etc/nginx/nginx.conf"
+if ! grep -q "listen 80" "$nginx_conf"; then
+    echo "Adding listen directive to Nginx configuration..."
+    echo "listen 80;" | tee -a "$nginx_conf"
+fi
+
+# Check for conflicting services on port 80
+conflicting_service=$(lsof -i :80 | awk 'NR!=1 {print $1}')
+if [[ -n "$conflicting_service" ]]; then
+    echo "A service ($conflicting_service) is already running on port 80."
+    echo "Please stop or reconfigure the conflicting service and try again."
+    exit 1
+fi
+
+# Check firewall settings
+if ! ufw status | grep -q "80/tcp"; then
+    echo "Opening port 80 in firewall..."
+    ufw allow 80/tcp
+fi
+
+# Restart Nginx
+echo "Restarting Nginx..."
+service nginx restart
+
+# Verify Nginx is now listening on port 80
+if ! netstat -tuln | grep -q ":80"; then
+    echo "Failed to configure Nginx to listen on port 80."
+    exit 1
+fi
+
+echo "Nginx is now configured to listen on port 80."
+
