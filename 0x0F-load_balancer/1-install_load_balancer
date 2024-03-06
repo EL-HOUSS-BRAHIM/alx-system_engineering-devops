@@ -7,7 +7,7 @@ sudo apt-get install -y haproxy
 
 # Step 2: Configure HAproxy
 echo "Configuring HAProxy..."
-sudo echo "
+echo "
 frontend http_front
     bind *:80
     stats uri /haproxy?stats
