@@ -1,22 +1,6 @@
 #!/usr/bin/env bash
-
-# Install HAproxy
-sudo apt-get update
-sudo apt-get install -y haproxy
-
-# Configure HAproxy
-sudo tee /etc/haproxy/haproxy.cfg > /dev/null <<'EOF'
-frontend http_front
-    bind *:80
-    stats uri /haproxy?stats
-    default_backend http_back
-
-backend http_back
-    balance roundrobin
-    server web-01 54.160.111.181:80 check
-    server web-02 54.174.243.193:80 check
-EOF
-
-# Enable HAproxy init script
-sudo systemctl enable haproxy
-sudo systemctl restart haproxy
+#Double the number of webservers
+sudo apt update
+sudo apt install haproxy -y
+sudo sh -c 'echo "\nlisten myserver\n\tbind *:80\n\tbalance roundrobin\n\tserver server1 100.26.138.60:80 check\n\tserver server2 54.237.23.154:80 check\n" >> /etc/haproxy/haproxy.cfg'
+sudo service haproxy restart
