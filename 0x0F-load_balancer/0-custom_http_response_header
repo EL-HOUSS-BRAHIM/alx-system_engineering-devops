@@ -1,18 +1,26 @@
 #!/usr/bin/env bash
+#install and update the machine
+echo -e "update and install nginx. \n"
 sudo apt-get update
 sudo apt-get -y install nginx
+echo -e "\nstart nginx services. \n"
 sudo service nginx start
+echo -e "\nufw allow. \n"
 sudo ufw allow 'Nginx HTTP'
+echo -e "\ngive user permession. \n"
 sudo chown -R "$USER":"$USER" /var/www/html
 sudo chmod -R 755 /var/www
+echo -e "\nadd index page with hello. \n"
 echo "Hello World!" > /var/www/html/index.html
+echo -e "\nadd 404 page.\n"
 echo "Ceci n'est pas une page" > /var/www/html/404.html
 sudo sed -i '/listen 80 default_server/a rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;' /etc/nginx/sites-available/default
 sudo sed -i '/listen 80 default_server/a \\terror_page 404 /404.html;' /etc/nginx/sites-available/default
+echo -e "\nadd header X-Served-By.\n"
 sudo sed -i '/listen 80 default_server;/a add_header X-Served-By $hostname;' /etc/nginx/sites-available/default
 sudo service nginx reload
 sudo service nginx start
-sudo sh -c 'echo "Hello World!" > /var/www/html/index.nginx-debian.html'
+echo -e "\nadd 301 page.\n"
 sudo sed -i '/^}$/i \ \n\tlocation \/redirect_me {return 301 https:\/\/www.youtube.com\/watch?v=QH2-TGUlwu4;}' /etc/nginx/sites-available/default
 sudo service nginx reload
 sudo service nginx start
