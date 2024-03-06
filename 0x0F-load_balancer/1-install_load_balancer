@@ -15,8 +15,8 @@ frontend http_front
 
 backend http_back
     balance roundrobin
-    server web-01 52.3.253.170 check
-    server web-02 18.210.17.65 check
+    server web-01 52.3.253.170:80 check
+    server web-02 18.210.17.65:80 check
 " | sudo tee -a /etc/haproxy/haproxy.cfg > /dev/null
 
 # Step 3: Enable and restart HAproxy
