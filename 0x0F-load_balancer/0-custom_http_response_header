@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Script to configure Nginx with custom header
+sudo sed -i '/server_name localhost;/a \\tadd_header X-Served-By $hostname;' /etc/nginx/sites-available/default
+sudo service nginx restart
