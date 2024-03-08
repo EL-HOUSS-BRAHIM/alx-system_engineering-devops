@@ -3,36 +3,33 @@
 DOMAIN="$1"
 SUBDOMAIN="$2"
 
-# Perform DNS lookup for the domain
+# Function to query DNS information for a subdomain
+query_dns() {
+    local subdomain="$1"
+    local sub_domain
+    local record_type
+    local destination
+
+    sub_domain=$(dig "$subdomain"."$DOMAIN" +noall +answer | awk -F'.' '{print $1}')
+    record_type=$(dig "$subdomain"."$DOMAIN" +noall +answer | awk '{print $4}')
+    destination=$(dig "$subdomain"."$DOMAIN" +noall +answer | awk '{print $5}')
+
+    if [ -n "$sub_domain" ]; then
+        echo "The subdomain $sub_domain is a $record_type record and points to $destination"
+    else
+        echo "The subdomain $subdomain does not exist"
+    fi
+}
+
+# Perform DNS lookup for the domain and subdomain
 if [ -n "$SUBDOMAIN" ]; then
-    # Check if the user provided the domain arguments
-    SUB_DOMAIN=$(dig "$SUBDOMAIN"."$DOMAIN" +noall +answer | awk -F'.' '{print $1}')
-    RECORD_TYPE=$(dig "$SUBDOMAIN"."$DOMAIN" +noall +answer | awk '{print $4}')
-    DESTINATION=$(dig "$SUBDOMAIN"."$DOMAIN" +noall +answer | awk '{print $5}')
-    echo "The subdomain $SUB_DOMAIN is a $RECORD_TYPE record and points to $DESTINATION"
+    # Query information for the specified subdomain
+    query_dns "$SUBDOMAIN"
 else
- # first check for www
-    SUBDOMAIN="www"
-    SUB_DOMAIN=$(dig "$SUBDOMAIN"."$DOMAIN" +noall +answer | awk -F'.' '{print $1}')
-    RECORD_TYPE=$(dig "$SUBDOMAIN"."$DOMAIN" +noall +answer | awk '{print $4}')
-    DESTINATION=$(dig "$SUBDOMAIN"."$DOMAIN" +noall +answer | awk '{print $5}')
-    echo "The subdomain $SUB_DOMAIN is a $RECORD_TYPE record and points to $DESTINATION"
- # seconde check for lb-01
-    SUBDOMAIN="lb-01"
-    SUB_DOMAIN=$(dig "$SUBDOMAIN"."$DOMAIN" +noall +answer | awk -F'.' '{print $1}')
-    RECORD_TYPE=$(dig "$SUBDOMAIN"."$DOMAIN" +noall +answer | awk '{print $4}')
-    DESTINATION=$(dig "$SUBDOMAIN"."$DOMAIN" +noall +answer | awk '{print $5}')
-    echo "The subdomain $SUB_DOMAIN is a $RECORD_TYPE record and points to $DESTINATION"
- # thered check for web-01
-    SUBDOMAIN="web-01"
-    SUB_DOMAIN=$(dig "$SUBDOMAIN"."$DOMAIN" +noall +answer | awk -F'.' '{print $1}')
-    RECORD_TYPE=$(dig "$SUBDOMAIN"."$DOMAIN" +noall +answer | awk '{print $4}')
-    DESTINATION=$(dig "$SUBDOMAIN"."$DOMAIN" +noall +answer | awk '{print $5}')
-    echo "The subdomain $SUB_DOMAIN is a $RECORD_TYPE record and points to $DESTINATION"
- # forth check for web-02
-    SUBDOMAIN="web-02"
-    SUB_DOMAIN=$(dig "$SUBDOMAIN"."$DOMAIN" +noall +answer | awk -F'.' '{print $1}')
-    RECORD_TYPE=$(dig "$SUBDOMAIN"."$DOMAIN" +noall +answer | awk '{print $4}')
-    DESTINATION=$(dig "$SUBDOMAIN"."$DOMAIN" +noall +answer | awk '{print $5}')
-    echo "The subdomain $SUB_DOMAIN is a $RECORD_TYPE record and points to $DESTINATION"   
+    # Query information for the default subdomains
+    query_dns "www"
+    query_dns "lb-01"
+    query_dns "web-01"
+    query_dns "web-02"
 fi
+
