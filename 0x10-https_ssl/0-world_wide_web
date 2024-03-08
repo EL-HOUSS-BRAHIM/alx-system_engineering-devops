@@ -11,5 +11,28 @@ if [ -n "$SUBDOMAIN" ]; then
     DESTINATION=$(dig "$SUBDOMAIN"."$DOMAIN" +noall +answer | awk '{print $5}')
     echo "The subdomain $SUB_DOMAIN is a $RECORD_TYPE record and points to $DESTINATION"
 else
- echo "ok"   
+ # first check for www
+    SUBDOMAIN="www"
+    SUB_DOMAIN=$(dig "$SUBDOMAIN"."$DOMAIN" +noall +answer | awk -F'.' '{print $1}')
+    RECORD_TYPE=$(dig "$SUBDOMAIN"."$DOMAIN" +noall +answer | awk '{print $4}')
+    DESTINATION=$(dig "$SUBDOMAIN"."$DOMAIN" +noall +answer | awk '{print $5}')
+    echo "The subdomain $SUB_DOMAIN is a $RECORD_TYPE record and points to $DESTINATION"
+ # seconde check for lb-01
+    SUBDOMAIN="lb-01"
+    SUB_DOMAIN=$(dig "$SUBDOMAIN"."$DOMAIN" +noall +answer | awk -F'.' '{print $1}')
+    RECORD_TYPE=$(dig "$SUBDOMAIN"."$DOMAIN" +noall +answer | awk '{print $4}')
+    DESTINATION=$(dig "$SUBDOMAIN"."$DOMAIN" +noall +answer | awk '{print $5}')
+    echo "The subdomain $SUB_DOMAIN is a $RECORD_TYPE record and points to $DESTINATION"
+ # thered check for web-01
+    SUBDOMAIN="web-01"
+    SUB_DOMAIN=$(dig "$SUBDOMAIN"."$DOMAIN" +noall +answer | awk -F'.' '{print $1}')
+    RECORD_TYPE=$(dig "$SUBDOMAIN"."$DOMAIN" +noall +answer | awk '{print $4}')
+    DESTINATION=$(dig "$SUBDOMAIN"."$DOMAIN" +noall +answer | awk '{print $5}')
+    echo "The subdomain $SUB_DOMAIN is a $RECORD_TYPE record and points to $DESTINATION"
+ # forth check for web-02
+    SUBDOMAIN="web-02"
+    SUB_DOMAIN=$(dig "$SUBDOMAIN"."$DOMAIN" +noall +answer | awk -F'.' '{print $1}')
+    RECORD_TYPE=$(dig "$SUBDOMAIN"."$DOMAIN" +noall +answer | awk '{print $4}')
+    DESTINATION=$(dig "$SUBDOMAIN"."$DOMAIN" +noall +answer | awk '{print $5}')
+    echo "The subdomain $SUB_DOMAIN is a $RECORD_TYPE record and points to $DESTINATION"   
 fi
