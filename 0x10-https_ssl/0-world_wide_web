@@ -13,7 +13,7 @@ query_dns() {
     sub_domain=$(dig "$subdomain"."$DOMAIN" +noall +answer | awk -F'.' '{print $1}')
     record_type=$(dig "$subdomain"."$DOMAIN" +noall +answer | awk '{print $4}')
     destination=$(dig "$subdomain"."$DOMAIN" +noall +answer | awk '{print $5}')
-
+#wat
     if [ -n "$sub_domain" ]; then
         echo "The subdomain $sub_domain is a $record_type record and points to $destination"
     else
