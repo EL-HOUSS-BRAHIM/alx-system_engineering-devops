@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Assign domain and subdomain arguments to variables
+DOMAIN="$1"
+SUBDOMAIN="$2"
+
+# Perform DNS lookup for the domain
+if [ -n "$SUBDOMAIN" ]; then
+    # Check if the user provided the domain arguments
+    SUB_DOMAIN=$(dig "$SUBDOMAIN"."$DOMAIN" +noall +answer | awk -F'.' '{print $1}')
+    RECORD_TYPE=$(dig "$SUBDOMAIN"."$DOMAIN" +noall +answer | awk '{print $4}')
+    DESTINATION=$(dig "$SUBDOMAIN"."$DOMAIN" +noall +answer | awk '{print $5}')
+    echo "The subdomain $SUB_DOMAIN is a $RECORD_TYPE record and points to $DESTINATION"
+else
+ echo "ok"   
+fi
