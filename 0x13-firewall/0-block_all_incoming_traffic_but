@@ -3,4 +3,4 @@ sudo ufw deny 443/tcp
 sudo ufw deny 88/tcp
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
-sudo ufw enable
+sudo -y ufw enable
