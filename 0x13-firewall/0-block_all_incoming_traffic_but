@@ -1,3 +1,5 @@
+sudo apt update
+sudo apt install -y ufw
 sudo ufw deny 22/tcp
 sudo ufw deny 443/tcp
 sudo ufw deny 88/tcp
