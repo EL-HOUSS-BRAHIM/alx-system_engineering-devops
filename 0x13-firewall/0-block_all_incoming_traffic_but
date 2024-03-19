@@ -1,15 +1,23 @@
-echo -e "Updating and installimg UFW...\n"
-sudo apt update
-sudo apt install -y ufw
-echo -e "start Configuration of UFW....\n"
-#allow some ports
-sudo ufw allow 22/tcp
-sudo ufw allow 443/tcp
-sudo ufw allow 88/tcp
-# deny incoming
+echo -e "Updating\n"
+
+sudo apt-get update
+
+echo -e "Installing UFW\n"
+
+sudo apt-get install -y ufw
+
+echo -e "configuring UFW...\n"
+
+# Allow Outgoing and Deny Incoming
 sudo ufw default deny incoming
-# allow outgoing
 sudo ufw default allow outgoing
+
+# Allow ports
+sudo ufw allow 22
+sudo ufw allow 80
+sudo ufw allow 443
+
+# Enable Fire Wall
 sudo ufw enable
-# all good
+
 echo -e "Process Completed.\n"
