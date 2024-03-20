@@ -2,11 +2,10 @@
 # Bash script that generates a MySQL dump and creates a compressed arc
 
 # Script
-current_date=$(date +"%Y-%m-%d")
-day=$(date +"%d")
-month=$(date +"%m")
-year=$(date +"%Y")
-file_name = "$day-$month-$year.tar.gz"
+day=$(date + "%d")
+month=$(month + "%d")
+year=$(year + "%d")
+file_name ="$day-$month-$year.tar.gz"
 
 mysqldump --all-databases -u root --password="$1" > backup.sql
 tar -czvf "$file_name" backup.sql
