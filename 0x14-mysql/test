@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+current_date=$(date +"%Y-%m-%d")
+day=$(date +"%d")
+month=$(date +"%m")
+year=$(date +"%Y")
+
+echo "$day"
+echo "$year"
+echo "$month"
