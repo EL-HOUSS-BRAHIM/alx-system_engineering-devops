@@ -9,7 +9,7 @@ year=$(date +"%Y")
 file_name="$day-$month-$year.tar.gz"
 
 # Create MySQL dump
-sudo mysqldump --all-databases -u root --password="$1" > backup.sql
+sudo mysqldump --all-databases -u root > backup.sql
 
 # Check if mysqldump command succeeded
 if [ $? -ne 0 ]; then
