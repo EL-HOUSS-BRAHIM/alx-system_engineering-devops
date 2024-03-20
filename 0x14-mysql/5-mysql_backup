@@ -1,12 +1,33 @@
 #!/usr/bin/env bash
-# Bash script that generates a MySQL dump and creates a compressed arc
+# Bash script that generates a MySQL dump and creates a compressed archive
 
 # Script
 current_date=$(date +"%Y-%m-%d")
 day=$(date +"%d")
 month=$(date +"%m")
 year=$(date +"%Y")
-file_name ="$day-$month-$year.tar.gz"
+file_name="$day-$month-$year.tar.gz"
 
+# Create MySQL dump
 sudo mysqldump --all-databases -u root --password="$1" > backup.sql
+
+# Check if mysqldump command succeeded
+if [ $? -ne 0 ]; then
+    echo "MySQL dump failed. Exiting."
+    exit 1
+fi
+
+# Create tar-gzipped archive
 tar -czvf "$file_name" backup.sql
+
+# Clean up
+rm backup.sql
+
+# Check if tar command succeeded
+if [ $? -eq 0 ]; then
+    echo "Backup created successfully: $file_name"
+else
+    echo "Backup creation failed."
+fi
+
+
