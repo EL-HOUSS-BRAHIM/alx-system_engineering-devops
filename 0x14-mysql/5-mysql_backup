@@ -18,10 +18,10 @@ if [ $? -ne 0 ]; then
 fi
 
 # Create tar-gzipped archive
-tar -czvf "$file_name" backup.sql
+sudo tar -czvf "$file_name" backup.sql
 
 # Clean up
-rm backup.sql
+#rm backup.sql
 
 # Check if tar command succeeded
 if [ $? -eq 0 ]; then
