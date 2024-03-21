@@ -1,3 +1,16 @@
 #!/usr/bin/env bash
-# this script change the user and execute whoami command
-sudo -u "$1" whoami
+# Check if the correct number of arguments is provided
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 <username>"
+    exit 1
+fi
+# Assign the username provided as the first argument
+username="$1"
+# Check if the user exists
+if ! id "$username" &>/dev/null; then
+    echo "Error: User '$username' does not exist."
+    exit 1
+fi
+# Run whoami as the specified user
+sudo -u "$username" whoami
+
