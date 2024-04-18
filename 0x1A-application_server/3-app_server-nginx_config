@@ -1,0 +1,52 @@
+# nginx
+server {    
+    listen 80 default_server;
+    listen [::]:80 default_server;    
+    server_name _;
+    root /var/www/html;
+    index index.html index.htm index.nginx-debian.html;
+    location / { 
+            try_files $uri $uri/ =404;
+    }
+    location /airbnb-onepage/ {        
+            proxy_pass http://localhost:5000;
+            proxy_set_header Host $host;        
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;        
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_buffering off;
+            proxy_redirect off;
+            # WebSocket support        proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;        
+            proxy_set_header Connection "upgrade";
+            # Include this line if your app needs WebSockets
+            proxy_read_timeout 86400;    
+    }
+
+
+    # Serve /number_odd_or_even/ route on AirBnB_clone_v2
+    location ~ /airbnb-dynamic/number_odd_or_even/(\d+)$ {
+        proxy_pass http://127.0.0.1:5001/number_odd_or_even/$1;
+    }
+    
+    location /hbnb_static/ {
+            alias /data/web_static/current/;    
+    }
+    error_page 404 /error_404.html;
+    error_page 500 502 503 504 /50x.html;
+        location = /50x.html {
+            root /usr/share/nginx/html;    
+    }
+    add_header X-Served-By $hostname;
+    # SSL configuration
+    #    
+    # listen 443 ssl default_server;
+    # listen [::]:443 ssl default_server;    
+    #
+    # Note: You should disable gzip for SSL traffic.    
+    # See: https://bugs.debian.org/773332
+    #    
+    # ssl_certificate /path/to/your/certificate.crt;
+    # ssl_certificate_key /path/to/your/private.key;}
+    # Additional server blocks can be added for other domains or subdomains
+}
