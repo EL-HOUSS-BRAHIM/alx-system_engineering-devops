@@ -1,34 +1,15 @@
-# 4-app_server-nginx_config
+#!/bin/bash
 
-# Default server configuration
-server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
+# Find the PID of the Gunicorn master process
+GUNICORN_PID=$(ps auxf | grep '[g]unicorn' | awk '{print $2}')
 
-    # Replace with your domain name or public IP
-    server_name _;
+if [ -z "$GUNICORN_PID" ]; then
+    echo "Gunicorn is not running."
+    exit 1
+fi
 
-    location /api/ {
-        proxy_pass http://127.0.0.1:5002/;
-        proxy_redirect off;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
+# Send the hang-up signal to the Gunicorn master process
+kill -HUP "$GUNICORN_PID"
 
-    # Static files
-    location /static/ {
-        alias /path/to/AirBnB_clone_v3/static/;
-    }
+echo "Reloaded Gunicorn without downtime."
 
-    # Gunicorn pass-through
-    location / {
-        proxy_pass http://127.0.0.1:5002/;
-        proxy_redirect off;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-}
